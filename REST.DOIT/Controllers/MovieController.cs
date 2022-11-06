@@ -109,5 +109,69 @@ namespace REST.DOIT.Controllers
                 ErrorMessage = ""
             };
         }
+
+        [HttpGet("Task")]
+        public string DoTask()
+        {
+            int shared = 0;
+            Task task1 = Task.Run(() =>
+            {
+                Console.WriteLine(shared);
+                string res = DoHeavyComputation(15000);
+                shared++;
+                Console.WriteLine("Finish Task1 " + shared);
+            });
+
+            Task task2 = Task.Run(() =>
+            {
+                Console.WriteLine(shared);
+                string res = DoHeavyComputation(20000);
+                shared++;
+                Console.WriteLine("Finish Task 2 " + shared);
+            });
+
+            Task task3 = Task.Run(() =>
+            {
+                Console.WriteLine(shared);
+                string res = DoHeavyComputation(22000);
+                shared++;
+                Console.WriteLine("Finish Task 3 " + shared);
+            });
+
+            return "Don wait";
+        }
+
+        private string DoHeavyComputation(int length)
+        {
+            string result = string.Empty;
+
+            Random rand = new Random();
+            int arrLength = length;
+            List<int> arr = new List<int>();
+
+            // Populate List
+            for (int i = 0; i < arrLength; i++)
+            {
+                arr.Add(rand.Next(Int32.MaxValue));
+            }
+            // Bubble Sort
+            int temp = 0;
+
+            for (int i = 0; i < arr.Count; i++)
+            {
+                for (int sort = 0; sort < arr.Count - 1; sort++)
+                {
+                    if (arr[sort] > arr[sort + 1])
+                    {
+                        temp = arr[sort + 1];
+                        arr[sort + 1] = arr[sort];
+                        arr[sort] = temp;
+                    }
+                }
+                result += arr[i].ToString() + ", ";
+            }
+
+            return result;
+        }
     }
 }
